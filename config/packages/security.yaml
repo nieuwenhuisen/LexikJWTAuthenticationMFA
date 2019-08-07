@@ -14,8 +14,6 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
-            anonymous: true
         login:
             pattern: ^/api/login
             stateless: true
@@ -30,6 +28,8 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
+        main:
+            anonymous: true
 
 
     # Easy way to control access for large sections of your site
