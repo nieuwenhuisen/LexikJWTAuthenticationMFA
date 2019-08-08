@@ -22,7 +22,10 @@ class UserFixture extends Fixture
     	$user = new User();
     	$user->setEmail('admin@admin.com');
     	$user->setPassword($this->passwordEncoder->encodePassword($user, 'password'));
-        
+
+    	$mfaKey = bin2hex(random_bytes(16));
+        $user->setMfaKey($mfaKey);
+
         $manager->persist($user);
         $manager->flush();
     }
