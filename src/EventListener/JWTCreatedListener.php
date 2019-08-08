@@ -7,7 +7,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class JWTCreatedListener implements EventSubscriberInterface 
+class JWTCreatedListener implements EventSubscriberInterface
 {
     private $requestStack;
 
@@ -26,6 +26,10 @@ class JWTCreatedListener implements EventSubscriberInterface
     public function onJWTCreated(JWTCreatedEvent $event): void
     {
         $request = $this->requestStack->getCurrentRequest();
+
+        $user = $event->getUser();
+
+        // TODO: check user has MFA trait
 
         $payload = $event->getData();
         $payload['mfa_enabled'] = true;
