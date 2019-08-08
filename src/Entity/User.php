@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Traits\UseGoogleAuthenticatorTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -10,6 +11,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
+    use UseGoogleAuthenticatorTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
