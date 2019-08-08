@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,9 +14,11 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/verify", name="api_mfa_verify", methods="post")
      */
-    public function verify(Request $request, JWTTokenManagerInterface $manager) 
+    public function verify(Request $request, JWTTokenManagerInterface $manager): Response
     {
-        //dd($request);
+        $request->attributes->set('api_mfa_verify', true);
+        $request->attributes->set('mfa_verified', true);
+
         $user = $this->getUser();
         $token = $manager->create($user);
 

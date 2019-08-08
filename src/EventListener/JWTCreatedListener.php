@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use App\Entity\User;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -27,13 +28,16 @@ class JWTCreatedListener implements EventSubscriberInterface
     {
         $request = $this->requestStack->getCurrentRequest();
 
+        /** @var User $user */
         $user = $event->getUser();
 
-        // TODO: check user has MFA trait
+        if (!$user instanceof User) {
+            return;
+        }
 
         $payload = $event->getData();
-        $payload['mfa_enabled'] = true;
-        $payload['mfa_verified'] = ('api_mfa_verify' === $request->get('_route'));
+        $payload['mfa_enabled'] = $user->isMfaEnabled();
+        $payload['mfa_verified'] = true === $request->attributes->get('mfa_verified', false);
 
         $event->setData($payload);
     }

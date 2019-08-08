@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Traits\UseGoogleAuthenticatorTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -11,8 +10,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
-    use UseGoogleAuthenticatorTrait;
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -35,6 +32,12 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @var string|null
+     * @ORM\Column(type="string", length=180, nullable=true)
+     */
+    private $mfaKey;
 
     public function getId(): ?int
     {
@@ -109,5 +112,22 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
+    }
+
+    public function getMfaKey(): ?string
+    {
+        return $this->mfaKey;
+    }
+
+    public function setMfaKey(?string $mfaKey): self
+    {
+        $this->mfaKey = $mfaKey;
+
+        return $this;
+    }
+
+    public function isMfaEnabled(): bool
+    {
+        return null !== $this->mfaKey;
     }
 }
